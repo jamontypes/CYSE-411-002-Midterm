@@ -93,11 +93,12 @@ function renderIncidents(incidents) {
     try{
         const container = document.getElementById("incident-list");
         container.replaceChildren();
-        incidents.forEach(function (incident) {
+        //note: i forgot how to write the syntax, the error says i need a "{" and a "," somewhere.
+        //incidents.forEach(function (incident)){
             const li = document.createElement("li");
             item.textContent() = `<strong> ${incident.title} </strong> <span class="severity severity- ${incident.severity}">`;
             container.appendChild(item);
-        }
+        //}
     }catch{
         console.error("error", err);
     }
