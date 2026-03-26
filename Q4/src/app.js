@@ -18,7 +18,10 @@ function loadSession() {
 
 
 function renderStatusMessage(containerElement, message) {
-    containerElement.innerHTML = "<p>" + message + "</p>";   // UNSAFE
+    const msg = document.createElement("msg");
+    msg.textContent() = message;
+    containerElement.replaceChildren(msg);
+    
 }
 
 
@@ -36,8 +39,8 @@ function sanitizeSearchQuery(input) {
     //   - Trim leading/trailing whitespace before processing
     //   - Max 40 characters
     //   - Return null if the result is empty after sanitization
-    let sanitization = input.replace(/[^a-zA-Z0-9_-]/g, "").substring(0,40);
-    if (sanitzation == ""){
+    let sanitization = input.trim().replace(/[^a-zA-Z0-9_-]/g, "").substring(0,40);
+    if (sanitization === ""){
         return null;
     }
     return sanitization;
