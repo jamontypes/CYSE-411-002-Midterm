@@ -55,7 +55,16 @@ function saveDashboardState() {
 
 
 async function fetchIncidents() {
-    const res  = fetch("/api/incidents");      // Missing await
+    //const res  = fetch("/api/incidents");      // Missing await
+    const res = new Promise() => {setTimeout(() => {
+    }, 100000);}
+    try{
+        if (!res.ok){
+            console.error(`error: ${res.status}`)
+        }
+    }catch(error){
+        console.error("network faliure: ",error);
+    }
     const data = res.json();                   // Missing await; res is a Promise
     return data;
 }
