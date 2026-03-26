@@ -21,11 +21,16 @@ let currentFilter = "all";
 
 
 function loadDashboardState() {
-    const raw   = localStorage.getItem("dashboardState");
-    const state = JSON.parse(raw);             // No try/catch
-    currentFilter = state.filter;              // No enum validation
-    applyFilter(currentFilter);
+    try{
+        const raw   = localStorage.getItem("dashboardState");
+        const state = JSON.parse(raw);             // No try/catch
+        const filter = state.filter;              // No enum validation
+        applyFilter(currentFilter);
+    }catch(err){
+        
+    }
 }
+
 
 
 //  Q5.C  Dashboard State – Save
@@ -36,10 +41,14 @@ function loadDashboardState() {
 
 
 function saveDashboardState() {
+    try{
     const filterInput = document.getElementById("filter-select");
     const filter      = filterInput.value;    // Not validated before storing
     localStorage.setItem("dashboardState", JSON.stringify({ filter: filter }));
     currentFilter = filter;
+    }catch(err){
+
+    }
 }
 
 
@@ -85,7 +94,15 @@ function renderIncidents(incidents) {
 
     incidents.forEach(function (incident) {
         const item = document.createElement("li");
+        try{
+            if (!incident.ok){
+                return console.error(`failed validation: ${incident.status}`);
+            }
+        }catch(err){
+            
+        }
         // UNSAFE – directly inserts API response as HTML
+        // solution maybe: item.textContent() = `<strong> ${incident.title} </strong> <span class="severity severity- ${incident.severity}">`;
         item.innerHTML =
             "<strong>" + incident.title + "</strong>" +
             " <span class='severity severity-" + incident.severity + "'>" +

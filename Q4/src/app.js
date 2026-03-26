@@ -4,10 +4,23 @@
 
 
 function loadSession() {
-    const raw = sessionStorage.getItem("session");
-    const session = JSON.parse(raw);          // No try/catch
-    return session;                            // No field validation
+    try{
+        const raw = sessionStorage.getItem("session");
+        if(!raw){
+            return null;
+        }
+        const session = JSON.parse(raw);
+        if(typeof session.userId !== "string" || typeof session.role !== "string" || typeof session.displayName !== "string"){
+            return null;
+        }
+        return session;
+    }catch(err){
+        return null;
+    }
 }
+
+
+
 
 
 //  Q4.A  Status Message Rendering
