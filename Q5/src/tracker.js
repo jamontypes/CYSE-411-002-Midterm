@@ -21,16 +21,18 @@ let currentFilter = "all";
 
 
 function loadDashboardState() {
+    const allowed = ["all","low","medium","high","critical"];
+    let state = {filter:"all"};
     try{
-        const raw   = localStorage.getItem("dashboardState");
-        const state = JSON.parse(raw);             // No try/catch
-        const filter = state.filter;              // No enum validation
-        applyFilter(currentFilter);
-    }catch(err){
-        
-    }
-}
+        const raw = localStorage.getItem("dashboardState");
+        if (raw) state = JSON.parse(raw);   
 
+    }catch{
+        state = {filter:"all"};
+    }
+    const filter = state.filter;
+    applyFilter(currentFilter);
+}
 
 
 //  Q5.C  Dashboard State – Save
@@ -89,26 +91,18 @@ async function fetchIncidents() {
 
 
 function renderIncidents(incidents) {
-    const container = document.getElementById("incident-list");
-    container.innerHTML = "";                  // Clear previous results
-
-    incidents.forEach(function (incident) {
-        const item = document.createElement("li");
-        try{
-            if (!incident.ok){
-                return console.error(`failed validation: ${incident.status}`);
-            }
-        }catch(err){
-            
+    const allowedSeverity = ["low","medium","high","critical"];
+    try{
+        const container = document.getElementById("incident-list");
+        container.replaceChildren();
+        incidents.forEach(function (incident) {
+            const li = document.createElement("li");
+            item.textContent() = `<strong> ${incident.title} </strong> <span class="severity severity- ${incident.severity}">`;
+            container.appendChild(item);
         }
-        // UNSAFE – directly inserts API response as HTML
-        // solution maybe: item.textContent() = `<strong> ${incident.title} </strong> <span class="severity severity- ${incident.severity}">`;
-        item.innerHTML =
-            "<strong>" + incident.title + "</strong>" +
-            " <span class='severity severity-" + incident.severity + "'>" +
-            incident.severity + "</span>";
-        container.appendChild(item);
-    });
+    }catch(err){
+        console.error("error", err);
+    }
 }
 
 
