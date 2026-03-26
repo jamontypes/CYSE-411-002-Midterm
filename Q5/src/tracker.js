@@ -21,7 +21,6 @@ let currentFilter = "all";
 
 
 function loadDashboardState() {
-    const allowed = ["all","low","medium","high","critical"];
     let state = {filter:"all"};
     try{
         const raw = localStorage.getItem("dashboardState");
@@ -44,12 +43,12 @@ function loadDashboardState() {
 
 function saveDashboardState() {
     try{
-    const filterInput = document.getElementById("filter-select");
-    const filter      = filterInput.value;    // Not validated before storing
-    localStorage.setItem("dashboardState", JSON.stringify({ filter: filter }));
-    currentFilter = filter;
-    }catch(err){
-
+        const filterInput = document.getElementById("filter-select").value;
+        const filter = ACCEPTED_FILTERS.includes(filterInput) ? filterInput : "all";
+        localStorage.setItem("dashboardState", JSON.stringify({ filter: filter }));
+        currentFilter = filter;
+    }catch{
+        currentFilter = filter;
     }
 }
 
@@ -91,7 +90,6 @@ async function fetchIncidents() {
 
 
 function renderIncidents(incidents) {
-    const allowedSeverity = ["low","medium","high","critical"];
     try{
         const container = document.getElementById("incident-list");
         container.replaceChildren();
@@ -100,7 +98,7 @@ function renderIncidents(incidents) {
             item.textContent() = `<strong> ${incident.title} </strong> <span class="severity severity- ${incident.severity}">`;
             container.appendChild(item);
         }
-    }catch(err){
+    }catch{
         console.error("error", err);
     }
 }
